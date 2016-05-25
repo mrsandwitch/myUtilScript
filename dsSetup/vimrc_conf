@@ -1,0 +1,4 @@
+
+"vim setting for ds
+nmap oo o<Esc>k :w<CR>
+nmap <F11> :e<CR> G oo
