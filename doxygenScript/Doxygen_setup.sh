@@ -20,7 +20,9 @@ fi
 
 cd ${DOC_DEST}/${project_name}
 cp ${DOXYGEN_SCRIPT_DIR}/${doxygen_config_template} ./${doxygen_config_file}
-printf 'PROJECT_NAME\t=\t%s\nINPUT\t=\t%s\n' ${project_name} ${project_dir} > ./${project_config_file}
+#printf 'PROJECT_NAME\t=\t%s\nINPUT\t+=\t%s\n' ${project_name} ${project_dir} > ./${project_config_file}
+printf 'PROJECT_NAME\t=\t%s\nINPUT\t+=\t%s\n' ${project_name} ${project_dir} > ./${project_config_file}
+printf 'PREDEFINED\t+=\tSYNO_LIO_LUN_BACKUP' ${project_name} ${project_dir} >> ./${project_config_file}
 
 # generate doxygen file
 doxygen ${doxygen_config_file}
