@@ -5,14 +5,8 @@
 project_name=${PWD##*/}
 project_dir=${PWD}
 
-#cscopeDB_folder=.cscope_db
 cscopeDB_folder=${tagAndDB_dir}
 cscopeGen_file=cscope.files
-
-#echo ${project_name}
-#echo ${project_dir}/${cscopeDB_folder}
-#source ${BACKSRC_PROJ_DIR}/backup.conf
-#echo $BACKUP_DEST
 
 if [ ! -d ${project_dir}/${cscopeDB_folder} ]
 then
