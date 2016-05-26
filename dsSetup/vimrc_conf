@@ -1,4 +1,118 @@
+" This line should not be removed as it ensures that various options are
+" properly set to work with the Vim-related packages available in Debian.
+runtime! debian.vim
 
-"vim setting for ds
+set nocompatible
+filetype off
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" let Vundle manage Vundle, required
+Plugin 'file:///root/.vim/bundle/Vundle.vim'
+
+Plugin 'file:///crooloose/nerdtree'
+Plugin 'file:///altercation/vim-colors-solarized'
+Plugin 'file:///vim-airline/vim-airline'
+Plugin 'file:///vim-airline/vim-airline-themes'
+Plugin 'file:///ctrlpvim/ctrlp.vim'
+Plugin 'file:///mileszs/ack.vim'
+Plugin 'file:///ervandew/supertab'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+" set color scheme
+syntax enable
+set background=dark
+colorscheme solarized
+
+" UI setting----------------------
+set number          " enable line number
+set cursorline      " set cursorline
+set wildmenu        " visual autocomplete for command menu
+set autoindent
+set backspace=indent,eol,start
+
+"airline setting--------------------
+set laststatus=2
+" enable powerline-fonts
+let g:airline_powerline_fonts = 1
+" enable tabline
+let g:airline#extensions#tabline#enabled = 1
+" set left separator
+let g:airline#extensions#tabline#left_sep = ' '
+" set left separator which are not editting
+let g:airline#extensions#tabline#left_alt_sep = '|'
+" show buffer number
+let g:airline#extensions#tabline#buffer_nr_show = 1
+
+"setting for Ctrlp---------------------------
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
+
+"settinf for bufExplorer-------------------------------
+let g:bufExplorerDefaultHelp=0       " Do not show default help.
+let g:bufExplorerShowRelativePath=1  " Show relative paths.
+let g:bufExplorerSortBy='mru'        " Sort by most recently used.
+let g:bufExplorerSplitRight=0        " Split left.
+let g:bufExplorerSplitVertical=1     " Split vertically.
+let g:bufExplorerSplitVertSize = 30  " Split width
+let g:bufExplorerUseCurrentWindow=1  " Open in new window.
+
+"spacing and tab-----------------------------------------
+set tabstop=4       " number of visual spaces per TAB
+set softtabstop=4   " number of spaces in tab when editing
+set shiftwidth=4    " number of space when indenting
+
+"editing mapping-----------------------------------------
+let mapleader = "_"
+"save the document
+nmap <F12> :w<CR>
+vmap <F12> <Esc><F12>gv
+imap <F12> <Esc><F12>
+
+"enable undo after press ctrl u to delete a word in insert mode
+inoremap <c-u> <c-g>u<c-u>
+inoremap <c-w> <c-g>u<c-w>
+
+"copy text between different session
+set viminfo='100,<1000,s100,:100,n~/.vim/.viminfo
+vmap <silent> ,y "xy<CR>:wviminfo! ~/.viminfo<CR>
+nmap <silent> ,p :rviminfo! ~/.viminfo<CR>"xp
+
+"hightlight for searching--------------------------------
+set hlsearch
+
+let s:hilightws = 0
+hi ExtraWhitespace cterm=NONE ctermbg=darkgreen guibg=darkgreen
+hi link MaybeExtraWhitespace NONE
+match MaybeExtraWhitespace /^\s* \s*\|\s\+$/
+
+fun ToggleWhitespaceMatching()
+	if s:hilightws
+		hi link MaybeExtraWhitespace NONE
+		let s:hilightws = 0
+	else
+		hi link MaybeExtraWhitespace ExtraWhitespace
+		let s:hilightws = 1
+	endif
+endfun
+map <F7> :call ToggleWhitespaceMatching()<CR>
+
+"NERDTree setting--------------------------------------------
+nmap <F9> :NERDTreeToggle<CR>
+
+" window naviagation------------------------------------------
+:nmap <silent> <C-h> :wincmd h<CR>
+:nmap <silent> <C-j> :wincmd j<CR>
+:nmap <silent> <C-k> :wincmd k<CR>
+:nmap <silent> <C-l> :wincmd l<CR>
+
+" Auto moving down and save-----------------------------------
 nmap oo o<Esc>k :w<CR>
 nmap <F11> :e<CR> G oo
+
