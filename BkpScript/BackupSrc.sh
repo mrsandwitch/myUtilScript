@@ -5,7 +5,6 @@
 project_name=${PWD##*/}
 project_dir=${PWD}
 
-echo "hello"
 echo ${project_name}
 source ${BACKSRC_PROJ_DIR}/backup.conf
 echo $BACKUP_DEST
