@@ -1,10 +1,10 @@
 #!/bin/bash
-#- Script to manage source code template
-#- bashrc setting
+#- Base Script template
+
+# Optional alias to put in bashrc
 #export TEMPLATE_SCRIPT_DIR=/synosrc/myUtilScript/srcTemplate
 #alias tmpScript="bash ${TEMPLATE_SCRIPT_DIR}/srcTplMain.sh"
 
-#project_name=${PWD##*/}
 template_dst_dir=${PWD}
 template_src_dir=$(dirname ${0})/templates
 template_list_name=template_list.md
@@ -15,12 +15,10 @@ function printUsage(){
 	echo '-l list all template'
 	echo '-v Use vim view that template'
 	echo '-vc show that template in terminal'
-	echo '-c copy that template to current directory and open with vim'
-	echo '-cw copy that template to current directory without vim viewing'
+	echo '-c copy that template to current directory'
 	echo '-e Use vim open template and edit'
 	echo '-h show help message'
 	echo '-u update current available templates'
-	echo '-s save current file as templates'
 	printf "\n"
 }
 
@@ -32,36 +30,10 @@ function listTemp()
 }
 
 function viewTemp(){
-	vim -R ${template_src_dir}/${1} 
-}
-
-function viewCatTemp()
-{
-	cat ${template_src_dir}/${1} 
-}
-
-function editTemp()
-{
 	vim ${template_src_dir}/${1} 
 }
 
-function cloneTemp()
-{
-	cp -av ${template_src_dir}/${1} ${template_dst_dir} 
-}
-
-function cloneAndEdit()
-{
-	cp -av ${template_src_dir}/${1} ${template_dst_dir} 
-	vim ${template_dst_dir}/${1}
-}
-
-function saveTemp()
-{
-	cp -av ${template_dst_dir}/${1} ${template_src_dir} 
-	vim ${template_src_dir}/${1}
-}
-
+#Iterate through folder and cat name and second line to file
 function updateList()
 {
 	echo "List of available template:" > ${template_list}
@@ -72,10 +44,11 @@ function updateList()
 			continue;
 		fi
 		echo -n "${tmp} " >> ${template_list}
-		sed '2q;d' ${template_src_dir}/${tmp} >> ${template_list}
+		sed '2q;d' ${tmp} >> ${template_list}
 	done
 }
 
+#Script main
 case ${1} in
 	-h)
 		printUsage
@@ -86,23 +59,8 @@ case ${1} in
 	-v)
 		viewTemp ${2}
 		;;
-	-vc)
-		viewCatTemp ${2}
-		;;
-	-e)
-		editTemp ${2}
-		;;
 	-u)
 		updateList
-		;;
-	-cw)
-		cloneTemp ${2}
-		;;
-	-c)
-		cloneAndEdit ${2}
-		;;
-	-s)
-		saveTemp ${2}
 		;;
 	*)
 		echo "wrong input"
