@@ -9,7 +9,7 @@ if [ ! -d ${cmdTag_dir} ]; then
 fi
 
 export_cmdTag_dir="export COMMAND_TAG_DIR=${cmdTag_dir}"
-alias_string="alias cmdTag='sh ${cmdTag_dir}/command_tag.sh'"
+alias_string="alias CmdTag='sh ${cmdTag_dir}/command_tag.sh'"
 
 echo ${export_cmdTag_dir} >> ${dst_profile_path}
 echo ${alias_string} >> ${dst_profile_path}
