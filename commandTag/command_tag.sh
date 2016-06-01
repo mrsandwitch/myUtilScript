@@ -14,7 +14,9 @@ function printUsage()
 {
 	printf "\n"
 	echo 'h         print usage message'
-	echo 's         save command'
+	echo 's         save command (at the end of line)'
+	echo 'i         insert command (at first line)'
+	echo 'w         overwrite command'
 	echo 'm         echo saved command as text'
 	echo 'e         save and execute command'
 	echo '$[1-...]  execute N-th saved command'
@@ -34,6 +36,18 @@ function printUsage()
 function save()
 {
 	cur_cmd=${@}
+	echo ${cur_cmd} >> ${cmd_save}
+	
+	stored_line_num=$(wc -l <${cmd_save})
+	if [ ${stored_line_num} -gt ${max_line} ]; then
+		sed -i "${max_line}d" ${cmd_save}
+	fi
+	echo "Success to store the command"
+}
+
+function insert()
+{
+	cur_cmd=${@}
 	if [ ! -f ${cmd_save} ]; then
 		echo ${cur_cmd} > ${cmd_save}
 	else
@@ -44,7 +58,7 @@ function save()
 	if [ ${stored_line_num} -gt ${max_line} ]; then
 		sed -i "${max_line}d" ${cmd_save}
 	fi
-	echo "Success to store the command"
+	echo "Success to insert the command"
 }
 
 function saveAndExecute()
@@ -117,6 +131,27 @@ function echoCmd()
 	echo ${sel_cmd} 
 }
 
+function overwriteCmd()
+{
+	overwrite_line=${1}
+	cur_cmd=${@:2}
+
+	if [ ! -f ${cmd_save} ]; then
+		echo ${cur_cmd} > ${cmd_save}
+	fi
+	
+	stored_line_num=$(wc -l <${cmd_save})
+	if [ ${overwrite_line} -gt ${stored_line_num} ]; then
+		echo "replacing line larger than current stored index"
+		exit 1
+	fi
+
+	sed -i "${overwrite_line}s/.*/${cur_cmd}/g" ${cmd_save}
+
+	list
+	echo "Success to overwrite the command"
+}
+
 #Script main--------------------------
 is_in_menu=true;
 is_number=false;
@@ -130,8 +165,7 @@ fi
 re='^[0-9]+$'
 if ! [[ ${1} =~ ${re} ]] ; then
 	is_number=false
-else
-	executeNthCmd ${@:1}
+else executeNthCmd ${@:1}
 	exit 0
 fi
 
@@ -148,6 +182,9 @@ case ${1} in
 	s)
 		save ${@:2}
 		;;
+	i)
+		insert ${@:2}
+		;;
 	e)
 		saveAndExecute ${@:2}
 		;;
@@ -159,6 +196,9 @@ case ${1} in
 		;;
 	m)
 		echoCmd ${@:2}
+		;;
+	w)
+		overwriteCmd ${@:2}
 		;;
 	*)
 		if [ "${is_number}" = false ]; then
