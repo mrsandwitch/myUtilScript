@@ -146,7 +146,8 @@ function overwriteCmd()
 		exit 1
 	fi
 
-	sed -i "${overwrite_line}s/.*/${cur_cmd}/g" ${cmd_save}
+	sed -i "${overwrite_line}d" ${cmd_save}
+	sed -i "${overwrite_line}i${cur_cmd}" ${cmd_save}
 
 	list
 	echo "Success to overwrite the command"
