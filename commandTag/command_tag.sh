@@ -20,12 +20,12 @@ function printUsage()
 	echo 'm         echo saved command as text'
 	echo 'e         save and execute command'
 	echo '$[1-...]  execute N-th saved command'
-	echo '                      '		
+	echo '                      '
 	echo '  @PAM to indicate input parameter'
 	echo '  EX: cmdTag s echo @PAM'
 	echo '      cmdTag 1 hello'
 	echo '  hello'
-	echo '                      '		
+	echo '                      '
 	echo 'l         list saved command(partial)'
 	echo 'al        list all saved command'
 	echo 'f         flush all saved command'
@@ -37,7 +37,7 @@ function save()
 {
 	cur_cmd=${@}
 	echo ${cur_cmd} >> ${cmd_save}
-	
+
 	stored_line_num=$(wc -l <${cmd_save})
 	if [ ${stored_line_num} -gt ${max_line} ]; then
 		sed -i "${max_line}d" ${cmd_save}
@@ -53,7 +53,7 @@ function insert()
 	else
 		sed -i "1i${cur_cmd}" ${cmd_save}
 	fi
-	
+
 	stored_line_num=$(wc -l <${cmd_save})
 	if [ ${stored_line_num} -gt ${max_line} ]; then
 		sed -i "${max_line}d" ${cmd_save}
@@ -65,29 +65,29 @@ function saveAndExecute()
 {
 	cur_cmd=${@}
 	save ${cur_cmd}
-	${cur_cmd}
+	eval ${cur_cmd}
 }
 
 function list()
 {
-	printf "\n";	
+	printf "\n";
 	if [ -f ${cmd_save} ]; then
 		head -${show_line} ${cmd_save} | cat -n
 	else
 		echo "There is no stored command"
 	fi
-	printf "\n";	
+	printf "\n";
 }
 
 function listAll()
 {
-	printf "\n";	
+	printf "\n";
 	if [ -f ${cmd_save} ]; then
 		cat -n ${cmd_save};
 	else
 		echo "There is no stored command"
 	fi
-	printf "\n";	
+	printf "\n";
 }
 
 function flush(){
@@ -121,14 +121,14 @@ function generateCmd()
 function executeNthCmd()
 {
 	sel_cmd=$(generateCmd ${@})
-	echo ${sel_cmd} 
-	${sel_cmd}
+	echo ${sel_cmd}
+	eval ${sel_cmd}
 }
 
 function echoCmd()
 {
 	sel_cmd=$(generateCmd ${@})
-	echo ${sel_cmd} 
+	echo ${sel_cmd}
 }
 
 function overwriteCmd()
@@ -139,15 +139,22 @@ function overwriteCmd()
 	if [ ! -f ${cmd_save} ]; then
 		echo ${cur_cmd} > ${cmd_save}
 	fi
-	
+
 	stored_line_num=$(wc -l <${cmd_save})
 	if [ ${overwrite_line} -gt ${stored_line_num} ]; then
 		echo "replacing line larger than current stored index"
 		exit 1
 	fi
 
-	sed -i "${overwrite_line}d" ${cmd_save}
-	sed -i "${overwrite_line}i${cur_cmd}" ${cmd_save}
+	#- Last line condition
+	if [ ${overwrite_line} -eq ${stored_line_num} ]; then
+		sed -i "${overwrite_line}d" ${cmd_save}
+		let overwrite_line-=1
+		sed -i "${overwrite_line}a${cur_cmd}" ${cmd_save}
+	else
+		sed -i "${overwrite_line}d" ${cmd_save}
+		sed -i "${overwrite_line}i${cur_cmd}" ${cmd_save}
+	fi
 
 	list
 	echo "Success to overwrite the command"
@@ -157,7 +164,7 @@ function overwriteCmd()
 is_in_menu=true;
 is_number=false;
 
-source ${cmd_conf_file} 
+source ${cmd_conf_file}
 if [ ! -d ${cmd_db_dir} ]; then
 	mkdir $cmd_db_dir
 fi
@@ -166,7 +173,8 @@ fi
 re='^[0-9]+$'
 if ! [[ ${1} =~ ${re} ]] ; then
 	is_number=false
-else executeNthCmd ${@:1}
+else
+	executeNthCmd ${@:1}
 	exit 0
 fi
 

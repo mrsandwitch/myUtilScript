@@ -4,7 +4,10 @@ cmdTag_dir=~/commandTag
 mounted_cmdTag_dir=~/myUtilScript/commandTag
 dst_profile_path=/root/.profile
 
-if [ ! -d ${cmdTag_dir} ]; then
+if [ -d ${cmdTag_dir} ]; then
+	rm -r ${cmdTag_dir}
+	cp -r ${mounted_cmdTag_dir} ${cmdTag_dir}
+else
 	cp -r ${mounted_cmdTag_dir} ${cmdTag_dir}
 fi
 
