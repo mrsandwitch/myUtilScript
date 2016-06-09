@@ -1,2 +1,3 @@
 #ash profile for ds
 alias ck='cd ..;cd -;'
+test -r /etc/DIR_COLORS && eval "$(dircolors /etc/DIR_COLORS)"
