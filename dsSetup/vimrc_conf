@@ -116,3 +116,5 @@ nmap <F9> :NERDTreeToggle<CR>
 nmap oo o<Esc>k :w<CR>
 nmap <F11> :e<CR> G oo
 
+" Auto set log file to message
+nmap <F6> :setfiletype messages<CR>

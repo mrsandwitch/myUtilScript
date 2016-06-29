@@ -8,6 +8,7 @@ if [ -d ${cmdTag_dir} ]; then
 	rm -r ${cmdTag_dir}
 	cp -r ${mounted_cmdTag_dir} ${cmdTag_dir}
 else
+	#mkdir ${cmdTag_dir}
 	cp -r ${mounted_cmdTag_dir} ${cmdTag_dir}
 fi
 
