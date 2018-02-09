@@ -14,7 +14,7 @@ then
 	#find "`pwd`" -path "`pwd`/.*" -prune -o \( -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" \) -print > ${cscopeDB_folder}/${cscopeGen_file}
 fi
 
-find "`pwd`" -path "`pwd`/.*" -prune -o \( -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" \) -print > ${cscopeDB_folder}/${cscopeGen_file}
+find "`pwd`" -path "`pwd`/.*" -prune -o \( -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" -o -name "*.js" -o -name "*.cc" \) -print > ${cscopeDB_folder}/${cscopeGen_file}
 cd ${project_dir}/${cscopeDB_folder}
 cscope -Rbq -i ${cscopeGen_file}
 
